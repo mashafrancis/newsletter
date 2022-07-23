@@ -1,16 +1,6 @@
-name: Rust
+name: build
 
-on:
-  # NB: this differs from the book's project!
-  # These settings allow us to run this specific CI pipeline for PRs against
-  # this specific branch (a.k.a. book chapter).
-  push:
-    branches:
-      - root-chapter-03-part1
-  pull_request:
-    types: [ opened, synchronize, reopened ]
-    branches:
-      - root-chapter-03-part1
+on: [ push ]
 
 env:
   CARGO_TERM_COLOR: always
@@ -21,11 +11,12 @@ jobs:
     runs-on: ubuntu-latest
     services:
       postgres:
-        image: postgres:12
+        image: postgres:14
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: password
           POSTGRES_DB: postgres
+          DATABASE_URL: postgres://postgres:password@localhost:5432/newsletter
         ports:
           - 5432:5432
     env:
@@ -209,3 +200,11 @@ jobs:
         uses: actions-rs/tarpaulin@v0.1
         with:
           args: '--ignore-tests --avoid-cfg-tarpaulin'
+
+      - name: Code climate coverage action
+        uses: paambaati/codeclimate-action@v3.0.0
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+        with:
+          coverageCommand: cargo +nightly tarpaulin --verbose --all-features --workspace --timeout 120 --out Xml
+          debug: true
