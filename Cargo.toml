@@ -29,8 +29,13 @@ sqlx = { version = "0.6", default-features = false, features = ["runtime-actix-r
 uuid = { version = "1", features = ["v4"] }
 serde-aux = "3.1.0"
 unicode-segmentation = "1.9.0"
+validator = "0.16.0"
+rand = "0.8.4"
 
 [dev-dependencies]
 reqwest = { version = "0.11", features = ["json"] }
 once_cell = "1"
 claim = "0.5"
+fake = "~2.5"
+quickcheck = "1.0.3"
+quickcheck_macros = "1.0.0"
