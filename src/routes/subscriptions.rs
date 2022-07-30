@@ -1,5 +1,4 @@
 use crate::domain::{NewSubscriber, SubscriberEmail, SubscriberName};
-use actix_web::cookie::time::format_description::parse;
 use actix_web::{web, HttpResponse};
 use chrono::Utc;
 use sqlx::PgPool;
