@@ -10,7 +10,6 @@ async fn main() -> std::io::Result<()> {
 	let subscriber = get_subscriber("newsletter".into(), "info".into(), std::io::stdout);
 	init_subscriber(subscriber);
 
-	// Panic if we can't read configuration
 	let configuration = get_configuration().expect("Failed to read configuration.");
 	let connection_pool = PgPoolOptions::new().connect_lazy_with(configuration.database.with_db());
 
