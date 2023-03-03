@@ -1,9 +1,6 @@
 use newsletter::configuration::get_configuration;
-use newsletter::email_client::EmailClient;
-use newsletter::startup::{build, run, Application};
+use newsletter::startup::Application;
 use newsletter::telemetry::{get_subscriber, init_subscriber};
-use sqlx::postgres::PgPoolOptions;
-use std::net::TcpListener;
 
 #[tokio::main]
 async fn main() -> std::io::Result<()> {

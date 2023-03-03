@@ -58,11 +58,16 @@ pub struct EmailClientSettings {
 	pub base_url: String,
 	pub sender_email: String,
 	pub authorization_token: Secret<String>,
+	pub timeout_milliseconds: u64,
 }
 
 impl EmailClientSettings {
 	pub fn sender(&self) -> Result<SubscriberEmail, String> {
 		SubscriberEmail::parse(self.sender_email.clone())
+	}
+
+	pub fn timeout(&self) -> std::time::Duration {
+		std::time::Duration::from_millis(self.timeout_milliseconds)
 	}
 }
 
@@ -82,6 +87,13 @@ pub fn get_configuration() -> Result<Settings, config::ConfigError> {
 		.add_source(config::File::from(
 			configuration_directory.join(environment_filename),
 		))
+		// Add in settings from environment variables (with a prefix of APP and '__' as separator)
+		// E.g. `APP_APPLICATION__PORT=5001 would set `Settings.application.port`
+		.add_source(
+			config::Environment::with_prefix("APP")
+				.prefix_separator("_")
+				.separator("__"),
+		)
 		.build()?;
 
 	settings.try_deserialize::<Settings>()

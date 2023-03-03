@@ -1,12 +1,9 @@
 use newsletter::configuration::{get_configuration, DatabaseSettings};
-use newsletter::email_client::EmailClient;
-use newsletter::startup::{build, get_connection_pool, run, Application};
+use newsletter::startup::{get_connection_pool, Application};
 use newsletter::telemetry::{get_subscriber, init_subscriber};
 use once_cell::sync::Lazy;
 use sqlx::{Connection, Executor, PgConnection, PgPool};
-use std::net::TcpListener;
 use uuid::Uuid;
-use wiremock::MockServer;
 
 // Ensure that the `tracing` stack is only initialised once using `once_cell`
 static TRACING: Lazy<()> = Lazy::new(|| {
@@ -31,6 +28,18 @@ pub struct TestApp {
 	// pub email_server: MockServer,
 }
 
+impl TestApp {
+	pub async fn post_subscriptions(&self, body: String) -> reqwest::Response {
+		reqwest::Client::new()
+			.post(&format!("{}/subscriptions", &self.address))
+			.header("Content-Type", "application/x-www-form-urlencoded")
+			.body(body)
+			.send()
+			.await
+			.expect("Failed to execute request.")
+	}
+}
+
 pub async fn spawn_app() -> TestApp {
 	Lazy::force(&TRACING);
 
@@ -46,16 +55,11 @@ pub async fn spawn_app() -> TestApp {
 	// Create an migrate database
 	configure_database(&configuration.database).await;
 
-	// Launch the application as a background task
-	let server = build(configuration)
-		.await
-		.expect("Failed to build application.");
-	let _ = tokio::spawn(server);
-
 	let application = Application::build(configuration.clone())
 		.await
 		.expect("Failed to build application.");
 	let address = format!("http://127.0.0.1:{}", application.port());
+	let _ = tokio::spawn(application.run_until_stopped());
 
 	TestApp {
 		address,
