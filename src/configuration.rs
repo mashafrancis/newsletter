@@ -5,21 +5,21 @@ use sqlx::postgres::{PgConnectOptions, PgSslMode};
 use sqlx::ConnectOptions;
 use std::convert::{TryFrom, TryInto};
 
-#[derive(serde::Deserialize)]
+#[derive(serde::Deserialize, Clone)]
 pub struct Settings {
 	pub database: DatabaseSettings,
 	pub application: ApplicationSettings,
 	pub email_client: EmailClientSettings,
 }
 
-#[derive(serde::Deserialize)]
+#[derive(serde::Deserialize, Clone)]
 pub struct ApplicationSettings {
 	#[serde(deserialize_with = "deserialize_number_from_string")]
 	pub port: u16,
 	pub host: String,
 }
 
-#[derive(serde::Deserialize)]
+#[derive(serde::Deserialize, Clone)]
 pub struct DatabaseSettings {
 	pub username: String,
 	pub password: Secret<String>,
@@ -53,7 +53,7 @@ impl DatabaseSettings {
 	}
 }
 
-#[derive(serde::Deserialize)]
+#[derive(serde::Deserialize, Clone)]
 pub struct EmailClientSettings {
 	pub base_url: String,
 	pub sender_email: String,
@@ -80,7 +80,7 @@ pub fn get_configuration() -> Result<Settings, config::ConfigError> {
 			configuration_directory.join("base.yaml"),
 		))
 		.add_source(config::File::from(
-			configuration_directory.join(&environment_filename),
+			configuration_directory.join(environment_filename),
 		))
 		.build()?;
 
