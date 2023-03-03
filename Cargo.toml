@@ -15,11 +15,11 @@ name = "newsletter"
 actix-web = "4"
 chrono = "0.4.19"
 config = { version = "0.13.1", default-features = false, features = ["yaml"] }
-env_logger = "0.9"
+env_logger = "0.10.0"
 log = "0.4"
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 tracing = { version = "0.1", features = ["log"] }
-tracing-actix-web = "0.6"
+tracing-actix-web = "0.7.2"
 tracing-bunyan-formatter = "0.3"
 tracing-log = "0.1"
 tracing-subscriber = { version = "0.3", features = ["registry", "env-filter"] }
@@ -27,7 +27,7 @@ secrecy = { version = "0.8", features = ["serde"] }
 serde = { version = "1", features = ["derive"]}
 sqlx = { version = "0.6", default-features = false, features = ["runtime-actix-rustls", "macros", "postgres", "uuid", "chrono", "migrate", "offline"] }
 uuid = { version = "1", features = ["v4"] }
-serde-aux = "3.1.0"
+serde-aux = "4.1.0"
 unicode-segmentation = "1.9.0"
 validator = "0.16.0"
 rand = "0.8.4"
