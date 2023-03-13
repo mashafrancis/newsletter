@@ -37,7 +37,6 @@ impl DatabaseSettings {
 		} else {
 			PgSslMode::Prefer
 		};
-
 		PgConnectOptions::new()
 			.host(&self.host)
 			.username(&self.username)

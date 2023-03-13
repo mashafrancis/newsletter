@@ -58,8 +58,9 @@ pub async fn spawn_app() -> TestApp {
 	let application = Application::build(configuration.clone())
 		.await
 		.expect("Failed to build application.");
-	let address = format!("http://127.0.0.1:{}", application.port());
-	let _ = tokio::spawn(application.run_until_stopped());
+	let address = format!("http://localhost:{}", application.port());
+	print!("{}", address);
+	let _ = tokio::spawn(application.run_until_stopped()).await;
 
 	TestApp {
 		address,
@@ -73,7 +74,7 @@ pub async fn configure_database(config: &DatabaseSettings) -> PgPool {
 		.await
 		.expect("Failed to connect to Postgres");
 	connection
-		.execute(format!(r#"CREATE DATABASE "{}";"#, config.database_name).as_str())
+		.execute(&*format!(r#"CREATE DATABASE "{}";"#, config.database_name))
 		.await
 		.expect("Failed to create database.");
 

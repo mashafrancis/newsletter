@@ -11,6 +11,9 @@ path = "src/lib.rs"
 path = "src/main.rs"
 name = "newsletter"
 
+[[registires.crates-io]]
+protocol = "sparse"
+
 [dependencies]
 actix-web = "4"
 chrono = "0.4.19"
