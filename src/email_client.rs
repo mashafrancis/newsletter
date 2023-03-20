@@ -27,7 +27,7 @@ impl EmailClient {
 
 	pub async fn send_email(
 		&self,
-		recipient: SubscriberEmail,
+		recipient: &SubscriberEmail,
 		subject: &str,
 		html_content: &str,
 		text_content: &str,
@@ -68,8 +68,7 @@ struct SendEmailRequest<'a> {
 mod tests {
 	use crate::domain::SubscriberEmail;
 	use crate::email_client::EmailClient;
-	use claim::assert_err;
-	use claim::assert_ok;
+	use claims::{assert_err, assert_ok};
 	use fake::faker::internet::en::SafeEmail;
 	use fake::faker::lorem::en::{Paragraph, Sentence};
 	use fake::{Fake, Faker};
@@ -137,7 +136,7 @@ mod tests {
 
 		// Act
 		let _ = email_client
-			.send_email(email(), &subject(), &content(), &content())
+			.send_email(&email(), &subject(), &content(), &content())
 			.await;
 
 		// Assert
@@ -157,7 +156,7 @@ mod tests {
 
 		// Act
 		let outcome = email_client
-			.send_email(email(), &subject(), &content(), &content())
+			.send_email(&email(), &subject(), &content(), &content())
 			.await;
 
 		// Assert
@@ -179,7 +178,7 @@ mod tests {
 
 		// Act
 		let outcome = email_client
-			.send_email(email(), &subject(), &content(), &content())
+			.send_email(&email(), &subject(), &content(), &content())
 			.await;
 
 		// Assert
@@ -201,7 +200,7 @@ mod tests {
 
 		// Act
 		let outcome = email_client
-			.send_email(email(), &subject(), &content(), &content())
+			.send_email(&email(), &subject(), &content(), &content())
 			.await;
 
 		// Assert
