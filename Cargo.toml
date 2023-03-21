@@ -15,32 +15,41 @@ name = "newsletter"
 protocol = "sparse"
 
 [dependencies]
+actix-session = { version = "0.7", features = ["redis-rs-tls-session"] }
 actix-web = "4"
-chrono = "0.4.19"
-config = { version = "0.13.1", default-features = false, features = ["yaml"] }
-env_logger = "0.10.0"
+actix-web-flash-messages = { version = "0.4", features = ["cookies"] }
+actix-web-lab = "0.19.1"
+anyhow = "1.0.40"
+argon2 = { version = "0.5.0", features = ["std"] }
+base64 = "0.21.0"
+chrono = { version = "0.4.22", default-features = false, features = ["clock"] }
+config = { version = "0.13", default-features = false, features = ["yaml"] }
 log = "0.4"
-tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
-tracing = { version = "0.1", features = ["log"] }
-tracing-actix-web = "0.7.2"
-tracing-bunyan-formatter = "0.3"
-tracing-log = "0.1"
-tracing-subscriber = { version = "0.3", features = ["registry", "env-filter"] }
+rand = { version = "0.8", features=["std_rng"] }
+reqwest = { version = "0.11", default-features = false, features = ["json", "rustls-tls", "cookies"] }
 secrecy = { version = "0.8", features = ["serde"] }
-serde = { version = "1", features = ["derive"]}
+serde = "1.0.115"
+serde-aux = "4"
+serde_json = "1"
 sqlx = { version = "0.6", default-features = false, features = ["runtime-actix-rustls", "macros", "postgres", "uuid", "chrono", "migrate", "offline"] }
-uuid = { version = "1", features = ["v4"] }
-serde-aux = "4.1.0"
-unicode-segmentation = "1.9.0"
-validator = "0.16.0"
-rand = "0.8.4"
-reqwest = { version = "0.11.11", default-features = false, features = ["json", "rustls-tls"] }
+thiserror = "1.0.24"
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+tracing = "0.1.19"
+tracing-actix-web = "0.7"
+tracing-bunyan-formatter = "0.3"
+tracing-log = "0.1.1"
+tracing-subscriber = { version = "0.3", features = ["registry", "env-filter"] }
+unicode-segmentation = "1.7.1"
+uuid = { version = "1", features = ["v4", "serde"] }
+validator = "0.16"
 
 [dev-dependencies]
-once_cell = "1"
-claim = "0.5"
-fake = "~2.5"
+claims = "0.7.0"
+fake = "2.5.0"
+linkify = "0.9"
+once_cell = "1.7.2"
 quickcheck = "1.0.3"
 quickcheck_macros = "1.0.0"
-wiremock = "0.5.13"
-serde_json = "1"
+serde_json = "1.0.61"
+serde_urlencoded = "0.7.1"
+wiremock = "0.5"

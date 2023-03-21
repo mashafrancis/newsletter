@@ -19,14 +19,20 @@ impl AsRef<str> for SubscriberEmail {
 	}
 }
 
+impl std::fmt::Display for SubscriberEmail {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		self.0.fmt(f)
+	}
+}
+
 #[cfg(test)]
 mod tests {
 	use super::SubscriberEmail;
-	use claim::assert_err;
+	use argon2::password_hash::rand_core::SeedableRng;
+	use claims::assert_err;
 	use fake::faker::internet::en::SafeEmail;
 	use fake::Fake;
 	use rand::rngs::StdRng;
-	use rand::SeedableRng;
 
 	#[test]
 	fn empty_string_is_rejected() {
@@ -36,7 +42,7 @@ mod tests {
 
 	#[test]
 	fn email_missing_at_symbol_is_rejected() {
-		let email = "blah.com".to_string();
+		let email = "ursuladomain.com".to_string();
 		assert_err!(SubscriberEmail::parse(email));
 	}
 
@@ -53,11 +59,10 @@ mod tests {
 		fn arbitrary(g: &mut quickcheck::Gen) -> Self {
 			let mut rand_slice: [u8; 32] = [0; 32];
 			for i in 0..32 {
-				rand_slice[i] = u8::arbitrary(g);
+				rand_slice[i] = u8::arbitrary(g)
 			}
 			let mut seed = StdRng::from_seed(rand_slice);
 			let email = SafeEmail().fake_with_rng(&mut seed);
-			println!("{}", email);
 			Self(email)
 		}
 	}
